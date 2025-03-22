@@ -1,4 +1,6 @@
-@extends('layouts.sidenav_layout');
+@extends('layouts.sidenav_layout')
+
+@section('title', 'Category')
 
 @section('content')
 
