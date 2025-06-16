@@ -31,3 +31,99 @@
         </div>
     </div>
 </div>
+
+
+<script>
+
+
+
+    async function FillUpUpdateForm(id){
+        showLoader();
+        
+        try{
+            document.getElementById('updateID').value=id;
+
+            let res=await axios.post("/customer-by-id",{
+                id
+            });
+
+            hideLoader();
+            document.getElementById('customerNameUpdate').value=res.data.data['name'];
+            document.getElementById('customerEmailUpdate').value=res.data.data['email'];
+            document.getElementById('customerMobileUpdate').value=res.data.data['mobile'];
+
+        } catch (error) {
+            hideLoader();
+            errorToast("Failed to load");
+            console.error(error);
+        }
+    }
+
+
+    async function Update() {
+
+        try{
+            let customerName = document.getElementById('customerNameUpdate').value;
+            let customerEmail = document.getElementById('customerEmailUpdate').value;
+            let customerMobile = document.getElementById('customerMobileUpdate').value;
+            let updateID = document.getElementById('updateID').value;
+
+
+            if (customerName.length === 0) {
+                errorToast("Customer Name Required !")
+            }
+
+            else if(customerEmail.length===0){
+                errorToast("Customer Email Required !")
+            }
+
+            else if(customerMobile.length===0){
+                errorToast("Customer Mobile Required !")
+            }
+
+            else {
+                document.getElementById('update-modal-close').click();
+                // $('#update-modal').modal('hide');
+
+                showLoader();
+
+                let res = await axios.post("/update-customer",{
+                    name: customerName,
+                    email: customerEmail,
+                    mobile: customerMobile,
+                    id: updateID
+                });
+
+                // console.log(res);
+            
+                hideLoader();
+
+                if(res.status===200 && res.data.status=== 'success'){
+                    successToast('Request completed');
+                    document.getElementById("update-form").reset();
+                    await getList();
+                }
+                else{
+                    errorToast("Request fail !")
+                }
+            }
+        } catch (err) {
+            hideLoader();
+            if (err.response && err.response.status === 422) {
+                let errors = err.response.data.errors;
+                
+                for (let field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                        errorToast(errors[field][0]);
+                    }
+                }
+            } else if (err.response && err.response.status === 404) {
+                errorToast(err.response.data.message);
+                
+            } else {
+                errorToast(err.response.data.message);
+            }
+        }
+    }
+
+</script>

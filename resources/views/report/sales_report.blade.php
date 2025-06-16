@@ -22,8 +22,8 @@
             padding-bottom: 12px;
             padding-left: 6px;
             text-align: left;
-            background-color: #04AA6D;
-            color: white;
+            background-color: #04aa6d27;
+            color: rgb(0, 0, 0);
         }
     </style>
 </head>
@@ -36,16 +36,22 @@
     <tr>
         <th>Report</th>
         <th>Date</th>
-        <th>Total</th>
+        <th>Total sale</th>
         <th>Discount</th>
         <th>Vat</th>
         <th>Payable</th>
+        <th>Total Profit</th>
     </tr>
     </thead>
     <tbody>
     <tr>
         <td>Sales Report</td>
-        
+        <td>{{$from_date}} to {{$to_date}}</td>
+        <td>{{$total}}</td>
+        <td>{{$discount}}</td>
+        <td>{{$vat}}</td>
+        <td>{{$payable}} </td>
+        <td>{{$total_profit}} </td>
     </tr>
     </tbody>
 </table>
@@ -56,8 +62,7 @@
     <thead>
     <tr>
         <th>Customer</th>
-        <th>Phone</th>
-        <th>Email</th>
+        <th>Phone</th>        
         <th>Total</th>
         <th>Discount</th>
         <th>Vat</th>
@@ -66,9 +71,23 @@
     </tr>
     </thead>
     <tbody>
-   
+    @foreach ($list as $item)
+        <tr>
+            <td>{{$item->customer->name}}</td>
+            <td>{{$item->customer->mobile}}</td>           
+            <td>{{$item->total }}</td>
+            <td>{{$item->discount }}</td>
+            <td>{{$item->vat }}</td>
+            <td>{{$item->payable }}</td>
+            <td>{{$item->created_at }}</td>
+        </tr>
+    @endforeach
 
     </tbody>
 </table>
 </body>
 </html>
+
+
+
+

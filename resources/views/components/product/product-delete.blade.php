@@ -5,6 +5,8 @@
                 <h3 class=" mt-3 text-warning">Delete !</h3>
                 <p class="mb-3">Once delete, you can't get it back.</p>
                 <input class="d-none" id="deleteID"/>
+                <input class="d-none" id="deleteFilePath"/>
+
             </div>
             <div class="modal-footer justify-content-end">
                 <div>
@@ -15,3 +17,32 @@
         </div>
     </div>
 </div>
+
+<script>
+    async function itemDelete(){
+        let id=document.getElementById('deleteID').value;
+        let deleteFilePath=document.getElementById('deleteFilePath').value;
+        document.getElementById('delete-modal-close').click();
+        showLoader();
+        try{
+            let res=await axios.post("/delete-product",{id:id,file_path:deleteFilePath});
+            hideLoader();
+
+            if(res.status===200 && res.data.status=== 'success'){
+                successToast("Request completed")
+                await getList();
+            }
+            else{
+                errorToast("Request fail!")
+            }
+        }catch (err) {
+            hideLoader();
+            if (err.response && err.response.status === 404) {
+                errorToast(err.response.data.message);
+            } else {
+                // errorToast("Something went wrong");
+                errorToast(err.response.data.message);
+            }
+        }
+    }
+</script>

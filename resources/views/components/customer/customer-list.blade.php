@@ -18,22 +18,10 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Mobile</th>
-                    <th>Update</th>
-                    <th>Delete</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody id="tableList">
-                    <tr>
-                        <td>1</td>
-                        <td>Customer Name</td>
-                        <td>customer@email.com</td>
-                        <td>01234567899</td>
-                        <td><button data-bs-toggle="modal" data-bs-target="#update-modal" 
-                            class="float-end btn m-0 bg-gradient-primary">Update</button></td>
-                        
-                            <td><button data-bs-toggle="modal" data-bs-target="#delete-modal" 
-                            class="float-end btn m-0 bg-gradient-primary">Delete</button></td>
-                    </tr>
 
                 </tbody>
             </table>
@@ -41,3 +29,69 @@
     </div>
 </div>
 </div>
+
+
+
+<script>
+getList();
+
+
+async function getList() {
+    showLoader();
+    try{
+        let res=await axios.get("/all-customer");
+        hideLoader();
+        let tableList=$("#tableList");
+        let tableData=$("#tableData");
+        
+        tableData.DataTable().destroy();
+        tableList.empty();
+        
+        res.data.data.forEach(function (item,index) {
+            let row=`<tr>
+                <td>${index+1}</td>
+                <td>${item['name']}</td>
+                <td>${item['email']}</td>
+                <td>${item['mobile']}</td>
+                <td>
+                    <div class="d-flex justify-content-end gap-2">
+                         <div class="btn-group" role="group">
+                            <button data-id="${item['id']}" class="float-end btn btn editBtn btn-sm btn-info">Edit</button>
+                            <button data-id="${item['id']}" class="float-end btn btn deleteBtn btn-sm btn-primary">Delete</button>
+                        </div>
+                    </div>
+                </td>
+            </tr>`
+            tableList.append(row)
+        })
+
+        $('#tableList').on('click', '.editBtn', async function () {
+            let id = $(this).data('id');
+            await FillUpUpdateForm(id);
+            $("#update-modal").modal('show');
+        });
+        
+        $('#tableList').on('click', '.deleteBtn', async function () {
+            let id = $(this).data('id');
+            await ShowName(id);
+            $("#delete-modal").modal('show');
+            $("#deleteID").val(id);
+        });
+
+        new DataTable('#tableData',{
+            order:[[0,'asc']],
+            // lengthMenu:[5,10,15,20,30]
+        });
+    
+    } catch(err){
+       if (err.response && err.response.status === 500) {
+            errorToast(err.response.data.message);
+        } else {
+            errorToast(err.response.data.message);
+        }
+    }
+
+}
+
+
+</script>

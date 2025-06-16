@@ -1,9 +1,7 @@
-@extends('layouts.app');
-
-@section('title', 'User Login')
+@extends('layouts.app')
 
 @section('content')
 
-@include('components.auth.loging-form')
+@include('components.auth.login-form')
 
 @endsection

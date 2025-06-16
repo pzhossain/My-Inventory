@@ -1,9 +1,7 @@
-@extends('layouts.app');
-
-@section('title', 'Registration')
+@extends('layouts.app')
 
 @section('content')
 
-@include('components.auth.regestration-form')
+@include('components.auth.registration-form')
 
 @endsection

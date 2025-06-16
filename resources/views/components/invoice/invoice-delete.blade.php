@@ -15,3 +15,27 @@
         </div>
     </div>
 </div>
+
+<script>
+    async  function  itemDelete(){
+        let Id=document.getElementById('deleteID').value;
+        document.getElementById('delete-modal-close').click();
+        try {
+            showLoader();
+            let res = await axios.post("/delete-invoice", { inv_id: Id });
+            hideLoader();
+            
+            if (res.status === 200 && res.data.status === "success") {
+                successToast("Request completed");
+                await getList();
+            } else {
+                errorToast("Request failed!");
+            }
+        } catch (err) {
+            hideLoader();
+            errorToast("Server error");
+            console.error(err);
+        }            
+    }
+    
+</script>

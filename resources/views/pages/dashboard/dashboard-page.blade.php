@@ -1,10 +1,7 @@
-@extends('layouts.sidenav_layout');
-
-@section('title', 'Dashboard')
+@extends('layouts.sidenav-layout')
 
 @section('content')
 
 @include('components.dashboard.summary')
-
 
 @endsection
